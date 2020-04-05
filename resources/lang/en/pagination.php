@@ -15,5 +15,6 @@ return [
 
     'previous' => '&laquo; Previous',
     'next' => 'Next &raquo;',
+    'failed' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];
