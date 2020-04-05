@@ -10,8 +10,9 @@
                 <strong>Email: </strong> {{ auth()->user()->email }}
             </div>
             <div class="panel-footer">
-                <form action="{{route('logout')}}" method="post">
+                <form action="{{ route('logout') }}" method="post">
                     {{ csrf_field() }}
+                    
                     <button class="btn btn-danger btn-xs btn-block  ">Logout</button>
                 </form>
             </div>
