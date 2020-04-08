@@ -71,16 +71,16 @@
             </div>
         </nav>
 
-        <main class="py-4">
-          <div class="container">
-            @if (session()->has('flash'))
-              <div class="alert alert-info">
-                {{ session('flash') }}
-              </div>
-            @endif
-          </div>
-            @yield('content')
-        </main>
-      </div>
+        <div class="container">
+            <div class="row">
+                @if (session()->has('flash'))
+                    <div class="alert alert-info">
+                        {{ session('flash') }}
+                    </div>
+                @endif  
+                @yield('content')
+            </div>
+        </div>
+    </div>
 </body>
 </html>
