@@ -22,3 +22,5 @@ Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');  
 
 Auth::routes();
+
+Route::resource('tasks', 'TaskController');

@@ -65645,6 +65645,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -65682,14 +65694,92 @@ var App = /*#__PURE__*/function (_Component) {
     _this.state = {
       name: '',
       tasks: []
-    }; // bind
+    }; //bind
 
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.renderTasks = _this.renderTasks.bind(_assertThisInitialized(_this));
+    _this.handleDelete = _this.handleDelete.bind(_assertThisInitialized(_this));
     return _this;
-  } // handle change
-
+  }
 
   _createClass(App, [{
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      var _this2 = this;
+
+      // stop browser's default behaviour of reloading on form submit
+      e.preventDefault();
+      axios.post('/tasks', {
+        name: this.state.name
+      }).then(function (response) {
+        console.log('from handle submit', response);
+
+        _this2.setState({
+          tasks: [response.data].concat(_toConsumableArray(_this2.state.tasks))
+        });
+
+        _this2.setState({
+          name: ''
+        });
+      });
+    }
+  }, {
+    key: "renderTasks",
+    value: function renderTasks() {
+      var _this3 = this;
+
+      return this.state.tasks.map(function (task) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: task.id,
+          className: "media"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "media-body"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, task.name, ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: function onClick() {
+            return _this3.handleDelete(task.id);
+          },
+          className: "btn btn-sm btn-warning float-right"
+        }, "Delete"))));
+      });
+    } //get all tasks from backend
+
+  }, {
+    key: "getTasks",
+    value: function getTasks() {
+      var _this4 = this;
+
+      axios.get('/tasks').then(function (response // console.log(response.data.tasks)
+      ) {
+        return _this4.setState({
+          tasks: _toConsumableArray(response.data.tasks)
+        });
+      });
+    } // lifecycle method
+
+  }, {
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      this.getTasks();
+    } //handle delete
+
+  }, {
+    key: "handleDelete",
+    value: function handleDelete(id) {
+      //remote from local state
+      var isNotId = function isNotId(task) {
+        return task.id !== id;
+      };
+
+      var updatedTasks = this.state.tasks.filter(isNotId);
+      this.setState({
+        tasks: updatedTasks
+      }); //make delete request to the backend
+
+      axios["delete"]("/tasks/".concat(id));
+    } //handle change
+
+  }, {
     key: "handleChange",
     value: function handleChange(e) {
       this.setState({
@@ -65712,7 +65802,9 @@ var App = /*#__PURE__*/function (_Component) {
         className: "card-header"
       }, "Create Task"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
         className: "form-control",
@@ -65725,7 +65817,7 @@ var App = /*#__PURE__*/function (_Component) {
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-primary"
-      }, "Create Task")))))));
+      }, "Create Task")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), this.renderTasks())))));
     }
   }]);
 
