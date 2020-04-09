@@ -45,18 +45,16 @@ export default class App extends Component {
                         {task.name}{' '}
                         <span className="text-muted">
                             { ' ' }
-                            <br />by {task.user.name} |{' '}
+                            <br />by {task.user.name} {' '}
                             {task.updated_at
                                 .split(' ')
                                 .slice(1)
                                 .join(' ')}                        
                         </span>
-                        <div className="btn-group float-right">
-                            <Link className="btn btn-sm btn-success" to={`/${task.id}/edit`}>
-                                Edit
-                            </Link>
+                        <div className="form-group float-right">
+                            <Link className="btn btn-sm btn-success" to={`/${task.id}/edit`}>Edit</Link>
+                            <button onClick={() => this.handleDelete(task.id)} className="btn btn-sm btn-warning float-right">Delete</button>
                         </div>
-                        <button onClick={() => this.handleDelete(task.id)} className="btn btn-sm btn-warning float-right">Delete</button>
                     </p>
                 </div>
             </div>
@@ -102,12 +100,24 @@ export default class App extends Component {
             this.getTasks();
         });
     }
-    
+
     render() {
         return (
-            <div className="container">
-                <div className="row justify-content-center"> 
-                    <div className="col-md-8">
+            <div className="container pt-3">
+                <div className="row"> 
+                    <div className="col-6 col-md-8">
+                        <div className="card">
+                            <div className="card-body">
+                                <form onSubmit={this.handleSubmit}>
+                                    <div className="form-group">
+                                        <textarea className="form-control" onChange={this.handleChange} value={this.state.name} maxLength="255" rows="5" placeholder="Create a new task" required/>
+                                    </div>
+                                    <button type="submit" className="btn btn-primary">Create Task</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-6 col-md-4">
                         <div className="card">
                             <div className="card-header">Create Task</div>
                             <div className="card-body">
@@ -117,7 +127,15 @@ export default class App extends Component {
                                     </div>
                                     <button type="submit" className="btn btn-primary">Create Task</button>
                                 </form>
-                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row pt-2">
+                    <div className="col-sm-12 col-md-12">
+                        <div className="card">
+                            <div className="card-header">Post</div>
+                            <div className="card-body">
                                 {this.renderTasks()}
                             </div>
                         </div>

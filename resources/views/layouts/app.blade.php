@@ -78,9 +78,9 @@
                         {{ session('flash') }}
                     </div>
                 @endif  
-                @yield('content')
             </div>
         </div>
+        @yield('content')
     </div>
 </body>
 </html>
