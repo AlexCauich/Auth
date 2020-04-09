@@ -71,7 +71,7 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container pt-3">
             <div class="row">
                 @if (session()->has('flash'))
                     <div class="alert alert-info">
