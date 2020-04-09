@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ReactDOM } from "react-dom";
-
+import { Link } from 'react-router-dom';
 
 export default class App extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ export default class App extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.renderTasks = this.renderTasks.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-
+        this.handleUpdate = this.handleUpdate.bind(this);
     }
 
     handleSubmit(e) {
@@ -43,6 +43,19 @@ export default class App extends Component {
                 <div className="media-body">
                     <p>
                         {task.name}{' '}
+                        <span className="text-muted">
+                            { ' ' }
+                            <br />by {task.user.name} |{' '}
+                            {task.updated_at
+                                .split(' ')
+                                .slice(1)
+                                .join(' ')}                        
+                        </span>
+                        <div className="btn-group float-right">
+                            <Link className="btn btn-sm btn-success" to={`/${task.id}/edit`}>
+                                Edit
+                            </Link>
+                        </div>
                         <button onClick={() => this.handleDelete(task.id)} className="btn btn-sm btn-warning float-right">Delete</button>
                     </p>
                 </div>
@@ -82,6 +95,14 @@ export default class App extends Component {
         });
         console.log('onChange', this.state.name);
     }
+
+    //handle update
+    handleUpdate(id) {
+        axios.put(`/tasks/${id}`).then(response => {
+            this.getTasks();
+        });
+    }
+    
     render() {
         return (
             <div className="container">
