@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ReactDOM } from "react-dom";
 import { Link } from 'react-router-dom';
 
-export default class App extends Component {
+export default class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,7 +38,35 @@ export default class App extends Component {
     }
 
     renderTasks() {
-        return this.state.tasks.map(task => (
+
+        return this.state.tasks.map((data) =>  {
+
+            return(
+                <div className="row pt-2">
+                    <div className="col-sm-5 col-md-5 col-lg-5">
+                        <div className="card">
+                            <div className="card-header">
+                                <p>Created: {data.created_at}</p>
+                            </div>
+                            <div className="card-body">
+                                <p>User name: {data.user.name}</p>
+                                <p>Post: {data.name}</p>
+                            </div>
+                            <div className="card-footer">
+                                <div className="left">
+                                    <Link className="btn btn-sm btn-success" to={`/${data.id}/edit`}>Edit</Link>
+                                    <button onClick={() => this.handleDelete(data.id)} className="btn btn-sm btn-danger float-right">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            )
+        })
+
+    }
+
+    /*return this.state.tasks.map(task => (
             <div key={task.id} className="media">
                 <div className="media-body">
                     <p>
@@ -57,10 +85,8 @@ export default class App extends Component {
                         </div>
                     </p>
                 </div>
-            </div>
-        ));
-    }
-
+            </div>*/
+    
     //get all tasks from backend
     getTasks() {
         axios.get('/tasks').then((
@@ -103,43 +129,23 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="container pt-3">
-                <div className="row"> 
-                    <div className="col-6 col-md-8">
-                        <div className="card">
-                            <div className="card-body">
-                                <form onSubmit={this.handleSubmit}>
-                                    <div className="form-group">
-                                        <textarea className="form-control" onChange={this.handleChange} value={this.state.name} maxLength="255" rows="5" placeholder="Create a new task" required/>
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">Create Task</button>
-                                </form>
+            <div className="container">
+                <div className="row pt-4"> 
+                    <div className="col-md-12 col-lg-12 col-sm-12">
+                         <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <label>New Post</label>
+                                <textarea class="form-control" onChange={this.handleChange} value={this.state.name} maxLength="255" rows="3" placeholder="Create a new task" required/>
                             </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4">
-                        <div className="card">
-                            <div className="card-header">Create Task</div>
-                            <div className="card-body">
-                                <form onSubmit={this.handleSubmit}>
-                                    <div className="form-group">
-                                        <textarea className="form-control" onChange={this.handleChange} value={this.state.name} maxLength="255" rows="5" placeholder="Create a new task" required/>
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">Create Task</button>
-                                </form>
+                            <div className="form-group">
+                                <button type="submit" className="btn btn-primary">Create Post</button>
                             </div>
-                        </div>
+                         </form>
                     </div>
                 </div>
-                <div className="row pt-2">
-                    <div className="col-sm-12 col-md-12">
-                        <div className="card">
-                            <div className="card-header">Post</div>
-                            <div className="card-body">
-                                {this.renderTasks()}
-                            </div>
-                        </div>
-                    </div>
+                <div className="form-group">
+                    <h2>Posts</h2>
+                    {this.renderTasks()}
                 </div>
             </div>
         );
